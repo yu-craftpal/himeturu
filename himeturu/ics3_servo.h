@@ -1,4 +1,4 @@
-﻿#ifndef _INC_ICSSERVO
+#ifndef _INC_ICSSERVO
 #define _INC_ICSSERVO
 
 #include "arduino.h"
