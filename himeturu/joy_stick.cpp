@@ -1,5 +1,5 @@
 #include "joy_stick.h"
-
+/// インスタンス生成時に呼ばれる
 JoyStick::JoyStick(int x, int y) {
 	xpin = x;
 	ypin = y;
@@ -10,7 +10,7 @@ JoyStick::JoyStick(int x, int y) {
 		axhistory[i].y = 0;
 	}
 }
-
+/// アナログ値を取得する
 axis JoyStick::read(boolean all) {
 	if (all == true) {
 		for (int i = AXHISTORYNUM - 1; i >= 0; i--) {
@@ -27,14 +27,14 @@ axis JoyStick::read(boolean all) {
 	axhistory[0].y = analogRead(ypin);
 	return axhistory[0];
 }
-
+/// 現在のスティック位置を取得する
 axis JoyStick::getPosition() {
 	axis ax;
 	ax = read(false);
 	ax = joymap(ax);
 	return ax;
 }
-
+/// RCフィルタをかけた現在のスティック位置を取得する
 axis JoyStick::getPositionRCFilter(double a) {
 	axis ax;
 	read(false);
@@ -43,7 +43,7 @@ axis JoyStick::getPositionRCFilter(double a) {
 	ax = joymap(ax);
 	return ax;
 }
-
+/// 移動平均フィルタをかけた現在のスティック位置を取得する
 axis JoyStick::getPositionAveFilter() {
 	axis ax;
 	long sumx, sumy;
@@ -59,7 +59,7 @@ axis JoyStick::getPositionAveFilter() {
 	ax = joymap(ax);
 	return ax;
 }
-
+/// 関数実行時のスティック状態を中央値とし，最大値，最小値を計算する
 mapxy JoyStick::setCenterPosition() {
 	axis ax;
 	read(true);
@@ -107,7 +107,7 @@ mapxy JoyStick::setCenterPosition() {
 
 	return posmap;
 }
-
+/// setCenterPositionの計算結果をもとに-100～100の範囲に変換する
 axis JoyStick::joymap(axis axin) {
 	axis axout;
 	axout.x = map(axin.x, posmap.x.min, posmap.x.max, -100, 100);
@@ -118,17 +118,4 @@ axis JoyStick::joymap(axis axin) {
 	else if (axout.y > 100)	axout.y = 100;
 
 	return axout;
-}
-
-mapxy JoyStick::getMap() {
-	return posmap;
-}
-mapxy JoyStick::setMap(int minx, int cetx, int maxx, int miny, int cety, int maxy) {
-	posmap.x.min = minx;
-	posmap.x.center = cetx;
-	posmap.x.max = maxx;
-	posmap.y.min = miny;
-	posmap.y.center = cety;
-	posmap.y.max = maxy;
-	return posmap;
 }
