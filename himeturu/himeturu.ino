@@ -1,5 +1,6 @@
 #include "joy_stick.h"
 #include "ics3_servo.h"
+#include "wing.h"
 
 IcsServo ics;
 JoyStick ljoy(A1, A2);
