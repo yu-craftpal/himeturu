@@ -2,29 +2,39 @@
 #define _INC_JOYSTICK
 
 #include "arduino.h"
-#include <PID_v1.h>
+
+#define AXHISTORYNUM 10
 
 typedef struct axis{
     int x;
     int y; 
-    int diffx;
-    int diffy;
+};
+typedef struct axismap {
+	int max;
+	int center;
+	int min;
+};
+typedef struct mapxy {
+	axismap x;
+	axismap y;
 };
 
 class JoyStick {
 private:
 
     int xpin, ypin;
-    axis lastax, currentax;  
+    axis axhistory[AXHISTORYNUM];
+	mapxy posmap;
 
 public:
 
     JoyStick(int x, int y);
-    axis read();
+    axis read(boolean all = false);
     axis getPosition();
     axis getPositionRCFilter(double a);
-    axis getPositionAveFilter(int a);
-    axis getPositionFilter();
+    axis getPositionAveFilter();
+	mapxy setCenterPosition();
+	axis joymap(axis axin);
 
 };
 
