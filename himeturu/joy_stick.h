@@ -29,12 +29,14 @@ private:
 public:
 
     JoyStick(int x, int y);
-    axis read(boolean all = false);
+    axis read(boolean all);
     axis getPosition();
     axis getPositionRCFilter(double a);
     axis getPositionAveFilter();
 	mapxy setCenterPosition();
 	axis joymap(axis axin);
+	mapxy getMap();
+	mapxy setMap(int minx, int cetx, int maxx, int miny, int cety, int maxy);
 
 };
 

@@ -1,25 +1,25 @@
 #include "joy_stick.h"
 
-JoyStick::JoyStick(int x, int y){
-    xpin = x;
-    ypin = y;
+JoyStick::JoyStick(int x, int y) {
+	xpin = x;
+	ypin = y;
 	pinMode(xpin, INPUT);
 	pinMode(ypin, INPUT);
-	for (int i = AXHISTORYNUM; i >= 0; i--) {
+	for (int i = AXHISTORYNUM - 1; i >= 0; i--) {
 		axhistory[i].x = 0;
 		axhistory[i].y = 0;
 	}
 }
 
-axis JoyStick::read(boolean all = false){
+axis JoyStick::read(boolean all) {
 	if (all == true) {
-		for (int i = AXHISTORYNUM; i > 0; i--) {
+		for (int i = AXHISTORYNUM - 1; i >= 0; i--) {
 			axhistory[i].x = analogRead(xpin);
 			axhistory[i].y = analogRead(ypin);
 		}
 	}
-	else{
-		for (int i = AXHISTORYNUM; i > 0; i--) {
+	else {
+		for (int i = AXHISTORYNUM - 1; i > 0; i--) {
 			axhistory[i] = axhistory[i - 1];
 		}
 	}
@@ -30,14 +30,14 @@ axis JoyStick::read(boolean all = false){
 
 axis JoyStick::getPosition() {
 	axis ax;
-	ax = read();
+	ax = read(false);
 	ax = joymap(ax);
 	return ax;
 }
 
 axis JoyStick::getPositionRCFilter(double a) {
 	axis ax;
-	read();
+	read(false);
 	ax.x = (a * axhistory[1].x) + ((1 - a) * axhistory[0].x);
 	ax.y = (a * axhistory[1].y) + ((1 - a) * axhistory[0].y);
 	ax = joymap(ax);
@@ -46,8 +46,9 @@ axis JoyStick::getPositionRCFilter(double a) {
 
 axis JoyStick::getPositionAveFilter() {
 	axis ax;
-	int sumx, sumy;
-	read();
+	long sumx, sumy;
+	sumx = sumy = 0;
+	read(false);
 	for (int i = 0; i < AXHISTORYNUM; i++) {
 		axis tmp = axhistory[i];
 		sumx += tmp.x;
@@ -61,9 +62,9 @@ axis JoyStick::getPositionAveFilter() {
 
 mapxy JoyStick::setCenterPosition() {
 	axis ax;
-	mapxy axm;
 	read(true);
-	int sumx, sumy;
+	long sumx, sumy;
+	sumx = sumy = 0;
 	for (int i = 0; i < AXHISTORYNUM; i++) {
 		axis tmp = axhistory[i];
 		sumx += tmp.x;
@@ -71,40 +72,40 @@ mapxy JoyStick::setCenterPosition() {
 	}
 	ax.x = sumx / AXHISTORYNUM;
 	ax.y = sumy / AXHISTORYNUM;
-	axm.x.center = ax.x;
-	axm.y.center = ax.y;
-	
-	int lowdiff = ax.x - 1;
-	int highdiff = 1023 - ax.x;
+	posmap.x.center = ax.x;
+	posmap.y.center = ax.y;
+
+	int lowdiff = posmap.x.center - 1;
+	int highdiff = 1023 - posmap.x.center;
 	if (lowdiff == highdiff) {
-		axm.x.min = 1;
-		axm.x.max = 1023;
+		posmap.x.min = 1;
+		posmap.x.max = 1023;
 	}
 	else if (lowdiff < highdiff) {
-		axm.x.min = 1;
-		axm.x.max = axm.x.center + (axm.x.center - 1);
+		posmap.x.min = 1;
+		posmap.x.max = posmap.x.center + (posmap.x.center - 1);
 	}
 	else if (lowdiff > highdiff) {
-		axm.x.min = axm.x.center - (1023 - axm.x.center);
-		axm.x.max = 1023;
+		posmap.x.min = posmap.x.center - (1023 - posmap.x.center);
+		posmap.x.max = 1023;
 	}
 
-	lowdiff = ax.y - 1;
-	highdiff = 1023 - ax.y;
+	lowdiff = posmap.y.center - 1;
+	highdiff = 1023 - posmap.y.center;
 	if (lowdiff == highdiff) {
-		axm.y.min = 1;
-		axm.y.max = 1023;
+		posmap.y.min = 1;
+		posmap.y.max = 1023;
 	}
 	else if (lowdiff < highdiff) {
-		axm.y.min = 1;
-		axm.y.max = axm.y.center + (axm.y.center - 1);
+		posmap.y.min = 1;
+		posmap.y.max = posmap.y.center + (posmap.y.center - 1);
 	}
 	else if (lowdiff > highdiff) {
-		axm.y.min = axm.y.center - (1023 - axm.y.center);
-		axm.y.max = 1023;
+		posmap.y.min = posmap.y.center - (1023 - posmap.y.center);
+		posmap.y.max = 1023;
 	}
-	posmap = axm;
-	return axm;
+
+	return posmap;
 }
 
 axis JoyStick::joymap(axis axin) {
@@ -115,5 +116,19 @@ axis JoyStick::joymap(axis axin) {
 	axout.y = map(axin.y, posmap.y.min, posmap.y.max, -100, 100);
 	if (axout.y < -100)	axout.y = -100;
 	else if (axout.y > 100)	axout.y = 100;
+
 	return axout;
+}
+
+mapxy JoyStick::getMap() {
+	return posmap;
+}
+mapxy JoyStick::setMap(int minx, int cetx, int maxx, int miny, int cety, int maxy) {
+	posmap.x.min = minx;
+	posmap.x.center = cetx;
+	posmap.x.max = maxx;
+	posmap.y.min = miny;
+	posmap.y.center = cety;
+	posmap.y.max = maxy;
+	return posmap;
 }
