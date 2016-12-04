@@ -5,10 +5,10 @@
 
 #define DEADBAND 10
 
-#define ELEBONCENTER 7180 //エレボン中央位置
-#define ELEBONRANGE 650  //エレボン可動範囲
-#define SPOILERCENTER 7250 //スポイラー初期位置
-#define SPOILERMAX 11500 //スポイラー可動最大値
+#define ELEBONCENTER 7180 //繧ｨ繝ｬ繝懊Φ荳ｭ螟ｮ菴咲ｽｮ
+#define ELEBONRANGE 650  //繧ｨ繝ｬ繝懊Φ蜿ｯ蜍慕ｯ�蝗ｲ
+#define SPOILERCENTER 7250 //繧ｹ繝昴う繝ｩ繝ｼ蛻晄悄菴咲ｽｮ
+#define SPOILERMAX 11500 //繧ｹ繝昴う繝ｩ繝ｼ蜿ｯ蜍墓怙螟ｧ蛟､
 
 class HimeturuWing {
 private:

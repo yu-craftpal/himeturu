@@ -3,73 +3,73 @@
 
 #include "arduino.h"
 
-#define AXHISTORYNUM 10	//�ǂꂾ���̗������c����
+#define AXHISTORYNUM 10	//どれだけの履歴を残すか
 
-//xy����\��
+//xy軸を表す
 typedef struct axis{
     int x;
     int y;
 };
-//�W���C�X�e�B�b�N�̍ŏ��C�����C�ő��\��
+//ジョイスティックの最小，中央，最大を表す
 typedef struct axismap {
 	int max;
 	int center;
 	int min;
 };
-//axismap��xy�����Z�b�g�ɂ�������
+//axismapをxy軸をセットにしたもの
 typedef struct mapxy {
 	axismap x;
 	axismap y;
 };
 
-//�W���C�X�e�B�b�N�Ɋւ���N���X
+//ジョイスティックに関するクラス
 class JoyStick {
 private:
 
-    int xpin, ypin;					//�W���C�X�e�B�b�N�̌q�����Ă���s���ԍ�
-    axis axhistory[AXHISTORYNUM];	//�W���C�X�e�B�b�N�̃A�i���O�l
-	mapxy posmap;					//�W���C�X�e�B�b�N�͈̔�
+    int xpin, ypin;					//ジョイスティックの繋がっているピン番号
+    axis axhistory[AXHISTORYNUM];	//ジョイスティックのアナログ値
+	mapxy posmap;					//ジョイスティックの範囲
 
 public:
 
 	/// <summary>
-	/// �C���X�^���X�������ɌĂ΂��
+	/// インスタンス生成時に呼ばれる
 	/// </summary>
-	/// <param name="x">X���̃s���ԍ�</param>
-	/// <param name="y">y���̃s���ԍ�</param>
+	/// <param name="x">X軸のピン番号</param>
+	/// <param name="y">y軸のピン番号</param>
     JoyStick(int x, int y);
 	/// <summary>
-	/// �A�i���O�l���擾����
+	/// アナログ値を取得する
 	/// </summary>
-	/// <param name="all">���������ׂčX�V���邩</param>
-	/// <returns>���݂̃A�i���O�l��Ԃ�</returns>
+	/// <param name="all">履歴をすべて更新するか</param>
+	/// <returns>現在のアナログ値を返す</returns>
     axis read(boolean all);
 	/// <summary>
-	/// ���݂̃X�e�B�b�N�ʒu���擾����
+	/// 現在のスティック位置を取得する
 	/// </summary>
-	/// <returns>-100�`100�͈̔́i�W���C�X�e�B�b�N������0�j</returns>
+	/// <returns>-100～100の範囲（ジョイスティック中央で0）</returns>
     axis getPosition();
 	/// <summary>
-	/// RC�t�B���^�����������݂̃X�e�B�b�N�ʒu���擾����
+	/// RCフィルタをかけた現在のスティック位置を取得する
 	/// </summary>
-	/// <param name="a">RC�t�B���^�̋��x�i0�`0.99�C����0.9�j</param>
-	/// <returns>-100�`100�͈̔́i�W���C�X�e�B�b�N������0�j</returns>
+	/// <param name="a">RCフィルタの強度（0～0.99，推奨0.9）</param>
+	/// <returns>-100～100の範囲（ジョイスティック中央で0）</returns>
     axis getPositionRCFilter(double a);
 	/// <summary>
-	/// �ړ����σt�B���^�����������݂̃X�e�B�b�N�ʒu���擾����
+	/// 移動平均フィルタをかけた現在のスティック位置を取得する
 	/// </summary>
-	/// <returns>-100�`100�͈̔́i�W���C�X�e�B�b�N������0�j</returns>
+	/// <returns>-100～100の範囲（ジョイスティック中央で0）</returns>
     axis getPositionAveFilter();
 	/// <summary>
-	/// �֐����s���̃X�e�B�b�N��Ԃ𒆉��l�Ƃ��C�ő�l�C�ŏ��l���v�Z����
+	/// 関数実行時のスティック状態を中央値とし，最大値，最小値を計算する
 	/// </summary>
-	/// <returns>�����l��400�̏ꍇ�C�ŏ��l�P�C�ő�l799�ƂȂ�i�A�i���O�l��0�`1023�̏ꍇ�j</returns>
+	/// <returns>中央値が400の場合，最小値１，最大値799となる（アナログ値が0～1023の場合）</returns>
 	mapxy setCenterPosition();
 	/// <summary>
-	/// setCenterPosition�̌v�Z���ʂ����Ƃ�-100�`100�͈̔͂ɕϊ�����
+	/// setCenterPositionの計算結果をもとに-100～100の範囲に変換する
 	/// </summary>
-	/// <param name="axin">�A�i���O�l</param>
-	/// <returns>-100�`100�͈̔́i�W���C�X�e�B�b�N������0�j</returns>
+	/// <param name="axin">アナログ値</param>
+	/// <returns>-100～100の範囲（ジョイスティック中央で0）</returns>
 	axis joymap(axis axin);
 
 };

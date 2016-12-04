@@ -1,5 +1,5 @@
 #include "joy_stick.h"
-/// ƒCƒ“ƒXƒ^ƒ“ƒX¶¬‚ÉŒÄ‚Î‚ê‚é
+/// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆæ™‚ã«å‘¼ã°ã‚Œã‚‹
 JoyStick::JoyStick(int x, int y) {
 	xpin = x;
 	ypin = y;
@@ -10,7 +10,7 @@ JoyStick::JoyStick(int x, int y) {
 		axhistory[i].y = 0;
 	}
 }
-/// ƒAƒiƒƒO’l‚ğæ“¾‚·‚é
+/// ã‚¢ãƒŠãƒ­ã‚°å€¤ã‚’å–å¾—ã™ã‚‹
 axis JoyStick::read(boolean all) {
 	if (all == true) {
 		for (int i = AXHISTORYNUM - 1; i >= 0; i--) {
@@ -27,14 +27,14 @@ axis JoyStick::read(boolean all) {
 	axhistory[0].y = analogRead(ypin);
 	return axhistory[0];
 }
-/// Œ»İ‚ÌƒXƒeƒBƒbƒNˆÊ’u‚ğæ“¾‚·‚é
+/// ç¾åœ¨ã®ã‚¹ãƒ†ã‚£ãƒƒã‚¯ä½ç½®ã‚’å–å¾—ã™ã‚‹
 axis JoyStick::getPosition() {
 	axis ax;
 	ax = read(false);
 	ax = joymap(ax);
 	return ax;
 }
-/// RCƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚½Œ»İ‚ÌƒXƒeƒBƒbƒNˆÊ’u‚ğæ“¾‚·‚é
+/// RCãƒ•ã‚£ãƒ«ã‚¿ã‚’ã‹ã‘ãŸç¾åœ¨ã®ã‚¹ãƒ†ã‚£ãƒƒã‚¯ä½ç½®ã‚’å–å¾—ã™ã‚‹
 axis JoyStick::getPositionRCFilter(double a) {
 	axis ax;
 	read(false);
@@ -43,7 +43,7 @@ axis JoyStick::getPositionRCFilter(double a) {
 	ax = joymap(ax);
 	return ax;
 }
-/// ˆÚ“®•½‹ÏƒtƒBƒ‹ƒ^‚ğ‚©‚¯‚½Œ»İ‚ÌƒXƒeƒBƒbƒNˆÊ’u‚ğæ“¾‚·‚é
+/// ç§»å‹•å¹³å‡ãƒ•ã‚£ãƒ«ã‚¿ã‚’ã‹ã‘ãŸç¾åœ¨ã®ã‚¹ãƒ†ã‚£ãƒƒã‚¯ä½ç½®ã‚’å–å¾—ã™ã‚‹
 axis JoyStick::getPositionAveFilter() {
 	axis ax;
 	long sumx, sumy;
@@ -59,7 +59,7 @@ axis JoyStick::getPositionAveFilter() {
 	ax = joymap(ax);
 	return ax;
 }
-/// ŠÖ”Às‚ÌƒXƒeƒBƒbƒNó‘Ô‚ğ’†‰›’l‚Æ‚µCÅ‘å’lCÅ¬’l‚ğŒvZ‚·‚é
+/// é–¢æ•°å®Ÿè¡Œæ™‚ã®ã‚¹ãƒ†ã‚£ãƒƒã‚¯çŠ¶æ…‹ã‚’ä¸­å¤®å€¤ã¨ã—ï¼Œæœ€å¤§å€¤ï¼Œæœ€å°å€¤ã‚’è¨ˆç®—ã™ã‚‹
 mapxy JoyStick::setCenterPosition() {
 	axis ax;
 	read(true);
@@ -107,7 +107,7 @@ mapxy JoyStick::setCenterPosition() {
 
 	return posmap;
 }
-/// setCenterPosition‚ÌŒvZŒ‹‰Ê‚ğ‚à‚Æ‚É-100`100‚Ì”ÍˆÍ‚É•ÏŠ·‚·‚é
+/// setCenterPositionã®è¨ˆç®—çµæœã‚’ã‚‚ã¨ã«-100ï½100ã®ç¯„å›²ã«å¤‰æ›ã™ã‚‹
 axis JoyStick::joymap(axis axin) {
 	axis axout;
 	axout.x = map(axin.x, posmap.x.min, posmap.x.max, -100, 100);
