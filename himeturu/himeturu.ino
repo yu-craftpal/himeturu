@@ -1,26 +1,25 @@
 #include "joy_stick.h"
-#include "ics3_servo.h"
 #include "wing.h"
 
-IcsServo ics;
 JoyStick ljoy(A1, A2);
 JoyStick rjoy(A3, A4);
-HimeturuWing wing;
+wingservo wingl = {  1, 2, 2, 3, 3 };
+wingservo wingr = { 11,12,12,13,13 };
+HimeturuWing wing(wingl, wingr);
 
 
 void setup() {
 
     Serial.begin(115200);
-    ics.begin();
-	mapxy lmap, rmap;
-	lmap = ljoy.setCenterPosition();
-	rmap = rjoy.setCenterPosition();
-
-	ics.position(13, 7500);
+	ljoy.setCenterPosition();
+	rjoy.setCenterPosition();
+	wing.wakeup();
 }
 
 void loop() {
 
+
+#if 0
 	axis lax = ljoy.getPosition();
 	axis rax = rjoy.getPosition();
     char str[50];
@@ -58,6 +57,6 @@ void loop() {
 	else{
 		ics.position(13, 7500);
 	}
-    
+#endif
     
 }
