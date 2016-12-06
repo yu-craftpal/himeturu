@@ -63,7 +63,8 @@ void setup() {
   sv_sp_left  = new Wing::WingServoUnit(SERVO_ID::SPOILER::LEFT, pos_center, area_max, area_min);
   sv_sp_right = new Wing::WingServoUnit(SERVO_ID::SPOILER::RIGHT, pos_center, area_max, area_min);
 
-  // Servo
+  // Wing Class
+  // WingServoUnit で指定した値に依存する
   elevon = new Wing::Elevon(sv_el_left, sv_el_right, EC, ES);
   spoiler = new Wing::Spoiler(sv_sp_left, sv_sp_right, SC, SM);
   // Stick

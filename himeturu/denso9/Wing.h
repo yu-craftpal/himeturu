@@ -13,9 +13,9 @@ namespace Wing {
   class Elevon : public WingServo {
     private:
       const int pos_center, pos_up, pos_down;
-      // 抵抗値を角度に変換
-      int getMicroSecUp(int value, int fromLow = 0, int fromHigh = 512);
-      int getMicroSecDown(int value, int fromLow = 0, int fromHigh = 512);
+      int refactorValue(int value);
+      int getPosUp(int value, int fromLow = 0, int fromHigh = 512);
+      int getPosDown(int value, int fromLow = 0, int fromHigh = 512);
 
     public:
       Elevon(WingServoUnit *servo_left, WingServoUnit *servo_right, int pos_center, int area)
@@ -33,9 +33,6 @@ namespace Wing {
       // エレボンを下げる
       void down(enum Side side, int value);
 
-      // 範囲外に数値が飛び出ないようにする
-      int refactorValue(int value);
-
       void interrupt(String str, int pos_x, int pos_y);
 
       String toString();
@@ -47,8 +44,9 @@ namespace Wing {
   class Spoiler : public WingServo {
     private:
       const int pos_center, pos_max;
-      // 抵抗値を角度に変換
-      int getMicroSec(int value, int fromLow = 0, int fromHigh = 512);
+      int refactorValue(int value);
+      int getPosOpen(int value, int fromLow = 0, int fromHigh = 512);
+
     public:
       Spoiler(WingServoUnit *servo_left, WingServoUnit *servo_right, int pos_center, int pos_max)
       : WingServo(servo_left, servo_right)
@@ -66,9 +64,6 @@ namespace Wing {
        * side : 比率を指定する翼側
        * raito: 比率 0~1000 */
       void open(enum Side side, int value, int raito);
-
-      // 範囲外に数値が飛び出ないようにする
-      int refactorValue(int value);
 
       void interrupt(String str, int pos_x, int pos_y);
 

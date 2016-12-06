@@ -7,11 +7,16 @@ namespace Wing {
    * Class: Wing::Elevon
    **************************************************/
   /* PRIVATE */
-  // 抵抗値を角度に変換
-  int Elevon::getMicroSecUp(int value, int fromLow, int fromHigh) {
+  // 範囲外に数値が飛び出ないようにする
+  int Elevon::refactorValue(int value) {
+    if (value < pos_down) return pos_down; else if (value > pos_up) return pos_up;
+    return value;
+  }
+  // (スティックの値)抵抗値を角度に変換
+  int Elevon::getPosUp(int value, int fromLow, int fromHigh) {
     return refactorValue(map(value, fromLow, fromHigh, pos_center, pos_up));
   }
-  int Elevon::getMicroSecDown(int value, int fromLow, int fromHigh) {
+  int Elevon::getPosDown(int value, int fromLow, int fromHigh) {
     return refactorValue(map(value, fromLow, fromHigh, pos_center, pos_down));
   }
 
@@ -22,16 +27,11 @@ namespace Wing {
   }
   // エレボンを上げる
   void Elevon::up(enum Side side, int value) {
-    moveServo(getMicroSecUp(value), side);
+    moveServo(getPosUp(value), side);
   }
   // エレボンを下げる
   void Elevon::down(enum Side side, int value) {
-    moveServo(getMicroSecDown(value), side);
-  }
-  // 範囲外に数値が飛び出ないようにする
-  int Elevon::refactorValue(int value) {
-    if (value < pos_down) return pos_down; else if (value > pos_up) return pos_up;
-    return value;
+    moveServo(getPosDown(value), side);
   }
   void Elevon::interrupt(String str, int pos_x, int pos_y) {
     // 翼制御
@@ -57,8 +57,13 @@ namespace Wing {
    * Class: Wing::Spoiler
    **************************************************/
   /* PRIVATE */
+  // 範囲外に数値が飛び出ないようにする
+  int Spoiler::refactorValue(int value) {
+    if (value < 0) return 0; else if (value > pos_max) return pos_max;
+    return value;
+  }
   // 抵抗値を角度に変換
-  int Spoiler::getMicroSec(int value, int fromLow, int fromHigh) {
+  int Spoiler::getPosOpen(int value, int fromLow, int fromHigh) {
     return refactorValue(map(value, fromLow, fromHigh, pos_center, pos_max));
   }
 
@@ -69,21 +74,16 @@ namespace Wing {
   }
   // スポイラを上げる
   void Spoiler::open(enum Side side, int value) {
-    moveServo(getMicroSec(value), side);
+    moveServo(getPosOpen(value), side);
   }
   /* 左右のスポイラを比率を考え上げる
    * <引数>
    * side : 比率を指定する翼側
    * raito: 比率 0~1000 */
   void Spoiler::open(enum Side side, int value, int raito) {
-    open(side, value);
+    //open(side, value); //?
     if (side == Left) open(Right, value * (1.0 - (float)raito / 1000));
     if (side == Right) open(Left, value * (1.0 - (float)raito / 1000));
-  }
-  // 範囲外に数値が飛び出ないようにする
-  int Spoiler::refactorValue(int value) {
-    if (value < 0) return 0; else if (value > pos_max) return pos_max;
-    return value;
   }
   void Spoiler::interrupt(String str, int pos_x, int pos_y) {
     // 翼制御
