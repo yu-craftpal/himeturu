@@ -18,7 +18,7 @@ namespace Wing {
       int getPosDown(int value, int fromLow = 0, int fromHigh = 512);
 
     public:
-      Elevon(WingServoUnit *servo_left, WingServoUnit *servo_right, int pos_center, int area)
+      Elevon(InterfaceServo *servo_left, InterfaceServo *servo_right, int pos_center, int area)
       : WingServo(servo_left, servo_right) //, pos_center, pos_center + area, pos_center - area)
       , pos_center(pos_center)
       , pos_up(pos_center + area)
@@ -48,7 +48,7 @@ namespace Wing {
       int getPosOpen(int value, int fromLow = 0, int fromHigh = 512);
 
     public:
-      Spoiler(WingServoUnit *servo_left, WingServoUnit *servo_right, int pos_center, int pos_max)
+      Spoiler(InterfaceServo *servo_left, InterfaceServo *servo_right, int pos_center, int pos_max)
       : WingServo(servo_left, servo_right)
       , pos_center(pos_center)
       , pos_max(pos_max) { }

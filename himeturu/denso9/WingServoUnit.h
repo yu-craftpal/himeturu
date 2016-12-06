@@ -5,10 +5,15 @@
 
 namespace Wing {
 
+  class InterfaceServo {
+    public:
+      virtual void moveServo(int pos) = 0;
+  };
+
   /**************************************************
    * Class: WingServoUnit
    **************************************************/
-  class WingServoUnit : private IcsServo {
+  class WingServoUnit : private IcsServo, public InterfaceServo {
     private:
       int toSafe(int pos);
 
@@ -18,8 +23,32 @@ namespace Wing {
       const int area_max;
       const int area_min;
 
-      WingServoUnit(unsigned char servo_id, int pos_center, int area_max, int area_min);
+      WingServoUnit(unsigned char servo_id, int pos_center, int area_max, int area_min)
+      : servo_id(servo_id)
+      , pos_center(pos_center)
+      , area_max(area_max)
+      , area_min(area_min)
+      , IcsServo()
+      {
+        IcsServo::begin();
+      }
       void moveServo(int pos);
   };
+
+  /**************************************************
+   * Class: WingServoUnit2
+   **************************************************/
+  class WingServoUnit2 : public InterfaceServo {
+    private:
+      WingServoUnit *sv[2];
+    public:
+      WingServoUnit2(WingServoUnit *sv_0, WingServoUnit *sv_1)
+      {
+        sv[0] = sv_0;
+        sv[1] = sv_1;
+      }
+      void moveServo(int pos);
+  };
+
 }
 #endif

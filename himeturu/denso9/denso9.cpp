@@ -38,8 +38,12 @@ static ControlSystem::Controler *controlerSpoiler;
 static ControlSystem::Controler *controlerElevon;
 
 // Servo Unit
-static Wing::WingServoUnit *sv_el_left;
-static Wing::WingServoUnit *sv_el_right;
+static Wing::WingServoUnit *sv_el_left_d;
+static Wing::WingServoUnit *sv_el_left_e;
+static Wing::WingServoUnit *sv_el_right_d;
+static Wing::WingServoUnit *sv_el_right_e;
+static Wing::InterfaceServo *sv_el_left;
+static Wing::InterfaceServo *sv_el_right;
 static Wing::WingServoUnit *sv_sp_left;
 static Wing::WingServoUnit *sv_sp_right;
 
@@ -57,13 +61,16 @@ void setup() {
   // Servo Unit
 
   //WingServoUnit(servo_id, pos_center, area_max, area_min);
-  int pos_center = 0; // test
-  int area_max = 0;
-  int area_min = 0;
-  sv_el_left  = new Wing::WingServoUnit(SERVO_ID::ELEVON::LEFT, pos_center, area_max, area_min);
-  sv_el_right = new Wing::WingServoUnit(SERVO_ID::ELEVON::RIGHT, pos_center, area_max, area_min);
-  sv_sp_left  = new Wing::WingServoUnit(SERVO_ID::SPOILER::LEFT, pos_center, area_max, area_min);
-  sv_sp_right = new Wing::WingServoUnit(SERVO_ID::SPOILER::RIGHT, pos_center, area_max, area_min);
+  sv_el_left_d  = new Wing::WingServoUnit(SERVO_ID::ELEVON::LEFT_D, EC, EC+ES, EC-ES);
+  sv_el_left_e  = new Wing::WingServoUnit(SERVO_ID::ELEVON::LEFT_E, EC, EC+ES, EC-ES);
+  sv_el_left_e  = new Wing::WingServoUnit(SERVO_ID::ELEVON::LEFT_E, EC, EC+ES, EC-ES);
+  sv_el_right_d = new Wing::WingServoUnit(SERVO_ID::ELEVON::RIGHT_D, EC, EC+ES, EC-ES);
+  sv_el_right_e = new Wing::WingServoUnit(SERVO_ID::ELEVON::RIGHT_E, EC, EC+ES, EC-ES);
+  sv_el_left  = new Wing::WingServoUnit2(sv_el_left_d, sv_el_left_e);
+  sv_el_right = new Wing::WingServoUnit2(sv_el_right_d, sv_el_right_e);
+
+  sv_sp_left  = new Wing::WingServoUnit(SERVO_ID::SPOILER::LEFT, SC, SM, SC);
+  sv_sp_right = new Wing::WingServoUnit(SERVO_ID::SPOILER::RIGHT, SC, SM, SC);
 
   // Wing Class
   // WingServoUnit で指定した値に依存する

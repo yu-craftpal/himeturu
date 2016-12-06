@@ -6,15 +6,6 @@ namespace Wing {
   /**************************************************
    * Class: WingServoUnit
    **************************************************/
-  WingServoUnit::WingServoUnit(unsigned char servo_id, int pos_center, int area_max, int area_min)
-  : servo_id(servo_id)
-  , pos_center(pos_center)
-  , area_max(area_max)
-  , area_min(area_min)
-  , IcsServo()
-  {
-    IcsServo::begin();
-  }
   void WingServoUnit::moveServo(int pos)
   {
     IcsServo::position(servo_id, toSafe(pos));
@@ -25,5 +16,13 @@ namespace Wing {
     if (pos < area_min) return area_min;
     if (pos > area_max) return area_max;
     return pos;
+  }
+  
+  /**************************************************
+   * Class: WingServoUnit2
+   **************************************************/
+  void WingServoUnit2::moveServo(int pos) {
+    sv[0]->moveServo(pos);
+    sv[1]->moveServo(pos);
   }
 }

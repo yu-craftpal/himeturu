@@ -12,11 +12,11 @@ namespace Wing {
    **************************************************/
   class WingServo {
     private:
-      WingServoUnit *sv_left;
-      WingServoUnit *sv_right;
+      InterfaceServo *sv_left;
+      InterfaceServo *sv_right;
 
     public:
-      WingServo(WingServoUnit *sv_left, WingServoUnit *sv_right)
+      WingServo(InterfaceServo *sv_left, InterfaceServo *sv_right)
       {
         this->sv_left = sv_left;
         this->sv_right= sv_right;
