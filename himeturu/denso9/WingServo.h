@@ -22,7 +22,7 @@ namespace Wing {
         this->sv_right= sv_right;
       }
       void moveServo(int pos, enum Side side);
-      virtual void interrupt(String str, int pos_x, int pos_y);
+      virtual void interrupt(String str, int pos_x, int pos_y) = 0;
   };
 
 }
