@@ -22,12 +22,14 @@
 // Servo ID
 namespace SERVO_ID {
   namespace ELEVON  {
-    const unsigned char LEFT  = 1;
-    const unsigned char RIGHT = 2;
+    const unsigned char LEFT_D  = 3;
+    const unsigned char LEFT_E  = 2;
+    const unsigned char RIGHT_D = 13;
+    const unsigned char RIGHT_E = 12;
   }
   namespace SPOILER {
-    const unsigned char LEFT  = 3;
-    const unsigned char RIGHT = 4;
+    const unsigned char LEFT  = 1;
+    const unsigned char RIGHT = 11;
   }
 }
 
