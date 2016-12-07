@@ -6,6 +6,7 @@ namespace Wing {
   /**************************************************
    * Class: WingServo
    **************************************************/
+   
   void WingServo::moveServo(int pos, enum Side side) {
     switch (side) {
       case Left:

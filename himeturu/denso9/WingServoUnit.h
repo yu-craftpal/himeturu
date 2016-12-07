@@ -17,6 +17,12 @@ namespace Wing {
     private:
       int toSafe(int pos);
 
+      int currValue;      // 現在の値
+      int propValue;      // 偏差
+      int inteValue;      // 積分値
+      int diffValue;      // 微分値
+      int pidValue(int desired);
+      
     public:
       const unsigned char servo_id;
       const int pos_center;
@@ -31,6 +37,9 @@ namespace Wing {
       , IcsServo()
       {
         IcsServo::begin();
+        // PID
+        currValue = pos_center; // 初めの値は初期位置
+        propValue = 0;          // 初めの偏差は0
       }
       void moveServo(int pos);
   };
