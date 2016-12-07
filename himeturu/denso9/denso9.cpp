@@ -7,10 +7,10 @@
 #include "WingServo.h"
 #include "debug.h"
 
-#define EC 1436 //エレボン中央位置
-#define ES 250  //エレボン可動範囲
-#define SC 1450 //スポイラー初期位置
-#define SM 2300 //スポイラー可動最大値
+#define EC 7180 //エレボン中央位置
+#define ES 650  //エレボン可動範囲
+#define SC 7250 //スポイラー初期位置
+#define SM 11500//スポイラー可動最大値
 
 // Elevon
 #define AST1 A2 //アナログスティック１（右で０）X
@@ -90,6 +90,4 @@ void loop() {
   // コントローラの割り込み
   controlerSpoiler->interrupt();
   controlerElevon->interrupt();
-
-  delay(60);
 }
