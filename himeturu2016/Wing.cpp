@@ -89,9 +89,9 @@ namespace Wing {
     // 翼制御
     if (str.indexOf("Top.") == 0) {
       open(Both, pos_y);
-    } else if (str.indexOf("TopLeft.") == 0) {
+    } else if (str.indexOf("Left.") == 0) {
       open(Left, pos_y, map(pos_x, 0, 512, 0, 1000));
-    } else if (str.indexOf("TopRight.") == 0) {
+    } else if (str.indexOf("Right.") == 0) {
       open(Right, pos_y, map(pos_x, 0, 512, 0, 1000));
     } else {
       close(Both);
