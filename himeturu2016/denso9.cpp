@@ -118,11 +118,29 @@ void switchStick() {
 	delay(10);
 }
 
+void selectMode() {
+	static bool isDemo = false;
+	bool pinstate = digitalRead(10);
+	if (isDemo != pinstate) {
+		isDemo = pinstate;
+		if (isDemo) {
+			controlerSpoiler->setStick(demoStickSpoiler);
+			controlerElevon->setStick(demoStickElevon);
+		}
+		else {
+			controlerSpoiler->setStick(stickSpoiler);
+			controlerElevon->setStick(stickElevon);
+		}
+	}
+}
+
 void loop() {
   DEBUG_LOG("---------- LOOP ----------");
   // コントローラの割り込み
   controlerSpoiler->interrupt();
   controlerElevon->interrupt();
 
-  if (!digitalRead(10)) switchStick();
+  //if (!digitalRead(10)) switchStick();
+  selectMode();
+  
 }
