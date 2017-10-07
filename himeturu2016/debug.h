@@ -1,4 +1,4 @@
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 #define DEBUG_LOG(str) Serial.println(String()+str);
 #define DEBUG_SETUP() Serial.begin(115200);

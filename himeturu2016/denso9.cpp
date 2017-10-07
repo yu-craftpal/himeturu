@@ -2,6 +2,7 @@
 
 #include <Servo.h>
 #include "Stick.h"
+#include "DemoStick.h"
 #include "Wing.h"
 #include "ControlSystem.h"
 #include "WingServo.h"
@@ -64,6 +65,11 @@ static Wing::WingServo *spoiler;
 static AnalogStick::Stick *stickElevon;
 static AnalogStick::Stick *stickSpoiler;
 
+// Demo Stick
+static DemoStick::DemoStick *demoStickElevon;
+static DemoStick::DemoStick *demoStickSpoiler;
+
+
 void setup() {
   DEBUG_SETUP();
   // Generate instance.
@@ -88,10 +94,28 @@ void setup() {
   // Stick
   stickElevon = new AnalogStick::Stick(AST1, AST2, 200, true, false);
   stickSpoiler = new AnalogStick::Stick(AST3, AST4, 200, false, true);
+  demoStickElevon = new DemoStick::DemoStick(AST1, AST2, 200, true, false);
+  demoStickSpoiler = new DemoStick::DemoStick(AST3, AST4, 200, false, true);
 
   // Initialize controlers.
   controlerSpoiler = new ControlSystem::Controler(stickSpoiler, spoiler);
   controlerElevon = new ControlSystem::Controler(stickElevon, elevon);
+
+  pinMode(10, INPUT_PULLUP);
+}
+
+void switchStick() {
+	static bool isDemo = false;
+	if ( isDemo ) {
+		controlerSpoiler->setStick(demoStickSpoiler);
+		controlerElevon->setStick(demoStickElevon);
+	}
+	else {
+		controlerSpoiler->setStick(stickSpoiler);
+		controlerElevon->setStick(stickElevon);
+	}
+	isDemo = !isDemo;
+	delay(10);
 }
 
 void loop() {
@@ -99,4 +123,6 @@ void loop() {
   // コントローラの割り込み
   controlerSpoiler->interrupt();
   controlerElevon->interrupt();
+
+  if (!digitalRead(10)) switchStick();
 }

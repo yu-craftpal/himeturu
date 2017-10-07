@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Arduino.h"
 #include "debug.h"
 // アナログスティック関係
@@ -9,7 +11,7 @@ typedef enum Position { Top, Bottom, Left, Right, Medium, PosLen = 9 };
 
 // スティッククラス
 class Stick {
-  private:
+  protected:
     int pos[2];                     // ポジション
     int pin[2];                     // ピン番号
     const bool reversed[2];         // 反転
@@ -18,6 +20,7 @@ class Stick {
     const int minimum = 0;          // 最小値
     const int maximum = 1023;       // 最大値
     const int medium = maximum / 2; // 中央値
+  private:
     // スティックからの入力値をセット
     void setPos() {
       if (!reversed[X]) pos[X] =  analogRead(pin[X]); // 0~1023
@@ -65,7 +68,8 @@ class Stick {
     Stick(int pin_x, int pin_y, int threshold = 100
           , bool reverse_x = false, bool reverse_y = false, bool refactor = true)
       : threshold(threshold), refactor(refactor), pin{pin_x, pin_y}
-      , reversed{reverse_x, reverse_y} {}
+      , reversed{reverse_x, reverse_y} {
+	}
     // 割り込み処理
     virtual void interrupt() {
       // 初期化, スティックポジションをフィールドにセット

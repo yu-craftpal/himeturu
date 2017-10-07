@@ -31,6 +31,10 @@ namespace ControlSystem {
           stick->getValue(AnalogStick::Y)
         );
       }
+
+	  void setStick(AnalogStick::Stick *s) {
+		  stick = s;
+	  }
   };
 
 }
