@@ -87,12 +87,17 @@ namespace Wing {
   }
   void Spoiler::interrupt(String str, int pos_x, int pos_y) {
     // 翼制御
-    if (str.indexOf("Top.") == 0) {
-      open(Both, pos_y);
-    } else if (str.indexOf("Left.") == 0) {
-      open(Left, pos_y, map(pos_x, 0, 512, 0, 1000));
-    } else if (str.indexOf("Right.") == 0) {
-      open(Right, pos_y, map(pos_x, 0, 512, 0, 1000));
+    // 配線の関係で XY座標系 を 90度 回転させている
+    if (str.indexOf("Right." /* 本来は"Top." */) == 0) {
+      open(Both, pos_x /* pos_y */);
+    } else if (str.indexOf("Bottom." /* 本来は"Left." */) == 0) {
+      //open(Left, pos_y, map(pos_x, 0, 512, 0, 1000));
+      open(Left, pos_y /* pos_x */);
+      close(Right);
+    } else if (str.indexOf("Top." /* 本来は"Right." */) == 0) {
+      //open(Right, pos_y, map(pos_x, 0, 512, 0, 1000));
+      open(Right, pos_y /* pos_x */);
+      close(Left);
     } else {
       close(Both);
     }

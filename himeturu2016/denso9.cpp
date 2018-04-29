@@ -95,8 +95,12 @@ void setup() {
 }
 
 void loop() {
-  DEBUG_LOG("---------- LOOP ----------");
-  // コントローラの割り込み
-  controlerSpoiler->interrupt();
-  controlerElevon->interrupt();
+  static unsigned long last = millis();
+  if ( last + 10UL < millis() ) {
+    last = millis();
+    DEBUG_LOG("---------- LOOP ----------");
+    // コントローラの割り込み
+    controlerSpoiler->interrupt();
+    controlerElevon->interrupt();    
+  }
 }
